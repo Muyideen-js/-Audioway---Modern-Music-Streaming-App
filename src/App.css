@@ -1,0 +1,39 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #121212;
+  color: white;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  padding-bottom: 90px; /* Make space for audio player */
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  margin-left: 240px; /* Width of sidebar */
+  padding: 20px;
+}
+
+/* Ensure proper spacing with fixed elements */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #121212;
+}
+
+.audio-player {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}

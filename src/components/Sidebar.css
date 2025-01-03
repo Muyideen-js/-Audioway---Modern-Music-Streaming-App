@@ -1,0 +1,68 @@
+.sidebar {
+  width: 240px;
+  background-color: #121212;
+  padding: 20px;
+  border-right: 1px solid #2a2a2a;
+  position: fixed;
+  top: 64px; 
+  bottom: 90px; 
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+}
+
+/* Custom scrollbar styling */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+.sidebar-section {
+  margin-bottom: 30px;
+}
+
+.sidebar-section h3 {
+  color: #f7b42c;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.sidebar-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar-section li {
+  margin-bottom: 12px;
+}
+
+.sidebar-section a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.sidebar-section a:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-section a.active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.1);
+} 
