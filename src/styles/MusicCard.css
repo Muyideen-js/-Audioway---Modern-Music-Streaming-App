@@ -43,6 +43,7 @@
   align-items: center;
   opacity: 0;
   transition: opacity 0.3s ease;
+  gap: 10px;
 }
 
 .music-card:hover .hover-overlay {
@@ -132,4 +133,28 @@
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 24px;
   padding: 24px;
-} 
+}
+
+.add-to-playlist-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.add-to-playlist-button:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.add-to-playlist-button svg {
+  width: 20px;
+  height: 20px;
+}

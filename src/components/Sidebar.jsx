@@ -36,9 +36,9 @@ function Sidebar() {
             </Link>
           </li>
           <li>
-            <Link to="/recently-supported" className={location.pathname === '/recently-supported' ? 'active' : ''}>
+            <Link to="/playlist" className={location.pathname === '/playlist' ? 'active' : ''}>
               <FiClock />
-              Recently Supported
+              Playlist
             </Link>
           </li>
           <li>

@@ -282,7 +282,7 @@ body {
 .content-area {
   flex: 1;
   padding: 2rem;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   margin-left: 240px; 
   background: linear-gradient(to bottom, rgba(16, 0, 11, 0.8), var(--background));
   min-height: calc(100vh - 64px - 90px); 

@@ -1,0 +1,51 @@
+.playlist-container {
+  padding: 20px;
+}
+
+.playlist-songs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.playlist-song-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background: var(--background-secondary);
+  border-radius: 8px;
+  gap: 15px;
+}
+
+.playlist-song-item img {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+}
+
+.song-info {
+  flex: 1;
+}
+
+.song-info h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.song-info p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.remove-button {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 8px;
+}
+
+.remove-button:hover {
+  color: var(--error);
+} 
