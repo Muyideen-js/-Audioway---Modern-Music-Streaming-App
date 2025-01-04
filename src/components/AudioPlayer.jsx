@@ -10,7 +10,20 @@ function AudioPlayer() {
   const [progress, setProgress] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { currentTrack, isPlaying } = state;
+  const { currentTrack, isPlaying, currentTime, duration } = state;
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const handleProgressChange = (e) => {
+    const audio = audioRef.current;
+    const time = parseFloat(e.target.value);
+    audio.currentTime = time;
+    dispatch({ type: 'UPDATE_TIME', payload: time });
+  };
 
   // Handle track changes
   useEffect(() => {
@@ -128,8 +141,17 @@ function AudioPlayer() {
           </button>
         </div>
         <div className="progress-container">
-          <div className="progress-bar" onClick={handleProgressClick}>
-            <div className="progress" style={{ width: `${progress}%` }} />
+          <div className="progress-bar">
+            {/* <input
+              type="range"
+              value={currentTime}
+              max={duration}
+              onChange={handleProgressChange}
+            /> */}
+            <div className="time">
+              <span>{formatTime(currentTime)}</span>
+              <span>{formatTime(duration)}</span>
+            </div>
           </div>
         </div>
       </div>

@@ -51,7 +51,7 @@ export async function fetchTrendingTracks() {
       market: 'US'
     });
 
-    console.log('Raw search results:', searchResults);
+    // console.log('Raw search results:', searchResults);
 
     if (!searchResults?.tracks?.items) {
       throw new Error('Invalid response from Spotify');
@@ -66,20 +66,20 @@ export async function fetchTrendingTracks() {
       previewUrl: track.preview_url || null
     }));
 
-    console.log('All tracks before filtering:', allTracks);
+    // console.log('All tracks before filtering:', allTracks);
 
     // Then filter with detailed logging
     const tracksWithPreviews = allTracks.filter(track => {
       const hasPreview = Boolean(track.previewUrl);
-      console.log(`Track "${track.title}":`, {
-        hasPreview,
-        previewUrl: track.previewUrl,
-        rawPreviewUrl: searchResults.tracks.items.find(t => t.id === track.id)?.preview_url
-      });
+      // console.log(`Track "${track.title}":`, {
+      //   hasPreview,
+      //   previewUrl: track.previewUrl,
+      //   rawPreviewUrl: searchResults.tracks.items.find(t => t.id === track.id)?.preview_url
+      // });
       return hasPreview;
     });
 
-    console.log('Tracks with previews:', tracksWithPreviews);
+    // console.log('Tracks with previews:', tracksWithPreviews);
 
     // Return all tracks for now to debug
     return allTracks;

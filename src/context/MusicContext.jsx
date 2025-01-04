@@ -1,90 +1,187 @@
-import { createContext, useContext, useReducer, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
 
 const MusicContext = createContext();
 
-// Load playlists from localStorage
-const getInitialState = () => {
-  try {
-    const savedState = localStorage.getItem('musicState');
-    if (savedState) {
-      return JSON.parse(savedState);
-    }
-  } catch (error) {
-    console.error('Error loading state from localStorage:', error);
-  }
-
-  return {
-    currentTrack: null,
-    isPlaying: false,
-    playlists: [], // Initialize empty array if no saved state
-  };
+const initialState = {
+  currentTrack: null,
+  isPlaying: false,
+  currentTime: 0,
+  duration: 0,
+  folders: [],
+  playlists: []
 };
 
 function musicReducer(state, action) {
-  let newState;
-
   switch (action.type) {
     case 'SET_TRACK':
-      newState = {
+      return {
         ...state,
         currentTrack: action.payload,
+        currentTime: 0
       };
-      break;
-
     case 'SET_PLAYING':
-      newState = {
+      return {
         ...state,
-        isPlaying: action.payload,
+        isPlaying: action.payload
       };
-      break;
-
-    case 'ADD_TO_PLAYLIST':
-      // Check if track already exists
-      const exists = state.playlists.some(track => track.id === action.payload.id);
-      if (!exists) {
-        newState = {
-          ...state,
-          playlists: [...state.playlists, action.payload]
-        };
-        console.log('Adding track to playlist:', action.payload);
-        console.log('New playlist state:', newState.playlists);
-      } else {
-        return state;
-      }
-      break;
-
-    case 'REMOVE_FROM_PLAYLIST':
-      newState = {
+    case 'UPDATE_TIME':
+      return {
         ...state,
-        playlists: state.playlists.filter(track => track.id !== action.payload)
+        currentTime: action.payload
       };
-      break;
-
+    case 'SET_DURATION':
+      return {
+        ...state,
+        duration: action.payload
+      };
+    case 'CREATE_FOLDER':
+      const newFolders = [...state.folders, action.payload];
+      localStorage.setItem('folders', JSON.stringify(newFolders));
+      return {
+        ...state,
+        folders: newFolders
+      };
+    case 'ADD_TO_FOLDER':
+      const updatedFolders = state.folders.map(folder => 
+        folder.id === action.payload.folderId
+          ? {
+              ...folder,
+              tracks: [...(folder.tracks || []), action.payload.track]
+            }
+          : folder
+      );
+      localStorage.setItem('folders', JSON.stringify(updatedFolders));
+      return {
+        ...state,
+        folders: updatedFolders
+      };
+    case 'LOAD_FOLDERS':
+      return {
+        ...state,
+        folders: action.payload
+      };
+    case 'DELETE_FOLDER':
+      const foldersAfterDelete = state.folders.filter(
+        folder => folder.id !== action.payload
+      );
+      localStorage.setItem('folders', JSON.stringify(foldersAfterDelete));
+      return {
+        ...state,
+        folders: foldersAfterDelete
+      };
+    case 'REMOVE_FROM_FOLDER':
+      const foldersAfterRemove = state.folders.map(folder =>
+        folder.id === action.payload.folderId
+          ? {
+              ...folder,
+              tracks: folder.tracks.filter(track => track.id !== action.payload.trackId)
+            }
+          : folder
+      );
+      localStorage.setItem('folders', JSON.stringify(foldersAfterRemove));
+      return {
+        ...state,
+        folders: foldersAfterRemove
+      };
+    // ... other cases ...
     default:
       return state;
   }
-
-  // Save entire state to localStorage after each update
-  try {
-    localStorage.setItem('musicState', JSON.stringify(newState));
-  } catch (error) {
-    console.error('Error saving state to localStorage:', error);
-  }
-
-  return newState;
 }
 
 export function MusicProvider({ children }) {
-  const [state, dispatch] = useReducer(musicReducer, getInitialState());
+  const [state, dispatch] = useReducer(musicReducer, initialState);
+  const audioRef = useRef(new Audio());
 
-  // Debug logging
+  // Handle track changes
   useEffect(() => {
-    console.log('MusicContext - Current state:', state);
-    console.log('MusicContext - Playlists:', state.playlists);
+    if (state.currentTrack?.previewUrl) {
+      audioRef.current.src = state.currentTrack.previewUrl;
+      
+      // Set up audio event listeners
+      const audio = audioRef.current;
+      
+      audio.addEventListener('loadedmetadata', () => {
+        dispatch({ type: 'SET_DURATION', payload: audio.duration });
+      });
+
+      audio.addEventListener('timeupdate', () => {
+        dispatch({ type: 'UPDATE_TIME', payload: audio.currentTime });
+      });
+
+      audio.addEventListener('ended', () => {
+        dispatch({ type: 'SET_PLAYING', payload: false });
+        dispatch({ type: 'UPDATE_TIME', payload: 0 });
+      });
+
+      if (state.isPlaying) {
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.error('Error playing audio:', error);
+            dispatch({ type: 'SET_PLAYING', payload: false });
+          });
+        }
+      }
+    }
+
+    return () => {
+      const audio = audioRef.current;
+      audio.removeEventListener('loadedmetadata', () => {});
+      audio.removeEventListener('timeupdate', () => {});
+      audio.removeEventListener('ended', () => {});
+    };
+  }, [state.currentTrack]);
+
+  // Handle play/pause
+  useEffect(() => {
+    const audio = audioRef.current;
+    
+    if (state.isPlaying) {
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.error('Error playing audio:', error);
+          dispatch({ type: 'SET_PLAYING', payload: false });
+        });
+      }
+    } else {
+      audio.pause();
+    }
+  }, [state.isPlaying]);
+
+  // Save state to localStorage
+  useEffect(() => {
+    const stateToSave = {
+      ...state,
+      currentTime: 0, // Don't save current time
+      isPlaying: false // Don't save playing state
+    };
+    localStorage.setItem('musicState', JSON.stringify(stateToSave));
   }, [state]);
 
+  // Load state from localStorage on mount
+  useEffect(() => {
+    const savedState = localStorage.getItem('musicState');
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      dispatch({ type: 'LOAD_STATE', payload: parsedState });
+    }
+  }, []);
+
+  // Load folders from localStorage on mount
+  useEffect(() => {
+    const savedFolders = localStorage.getItem('folders');
+    if (savedFolders) {
+      dispatch({ 
+        type: 'LOAD_FOLDERS', 
+        payload: JSON.parse(savedFolders) 
+      });
+    }
+  }, []);
+
   return (
-    <MusicContext.Provider value={{ state, dispatch }}>
+    <MusicContext.Provider value={{ state, dispatch, audioRef }}>
       {children}
     </MusicContext.Provider>
   );
@@ -97,3 +194,5 @@ export function useMusic() {
   }
   return context;
 }
+
+export default MusicContext;

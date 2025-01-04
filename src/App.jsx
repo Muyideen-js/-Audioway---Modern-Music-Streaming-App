@@ -8,13 +8,14 @@ import Login from './pages/Login';
 import SpotifyCallback from './components/SpotifyCallback';
 import ProtectedRoute from './components/ProtectedRoute';
 import SearchResults from './pages/SearchResults';
-import { PlaylistProvider } from './context/PlaylistContext';
-import Playlist from './components/Playlist';
+// import { PlaylistProvider } from './context/PlaylistContext';
+// import Playlist from './components/Playlist';
+import Playlist from './pages/Playlist'; // This is the correct import
 import './styles/theme.css';
 
 function App() {
   return (
-    <PlaylistProvider>
+    // <PlaylistProvider>
       <MusicProvider>
         <Router>
           <div className="app-container">
@@ -43,7 +44,7 @@ function App() {
           </div>
         </Router>
       </MusicProvider>
-    </PlaylistProvider>
+    // </PlaylistProvider>
   );
 }
 
