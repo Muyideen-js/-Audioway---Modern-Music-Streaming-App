@@ -1,0 +1,54 @@
+.recently-played-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-left: 40px;
+}
+
+.recently-played-header {
+  margin-bottom: 32px;
+}
+
+.recently-played-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.recently-played-header p {
+  color: #b3b3b3;
+  font-size: 14px;
+}
+
+.tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 24px;
+}
+
+.no-history {
+  text-align: center;
+  padding: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-top: 24px;
+}
+
+.no-history p {
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.no-history span {
+  color: #b3b3b3;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .tracks-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+  }
+} 

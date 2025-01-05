@@ -8,16 +8,26 @@ const initialState = {
   currentTime: 0,
   duration: 0,
   folders: [],
-  playlists: []
+  playlists: [],
+  recentlyPlayed: []
 };
 
 function musicReducer(state, action) {
   switch (action.type) {
     case 'SET_TRACK':
+      const newTrack = action.payload;
+      const updatedRecentlyPlayed = [
+        newTrack,
+        ...state.recentlyPlayed.filter(track => track.id !== newTrack.id)
+      ].slice(0, 20);
+
+      localStorage.setItem('recentlyPlayed', JSON.stringify(updatedRecentlyPlayed));
+      
       return {
         ...state,
-        currentTrack: action.payload,
-        currentTime: 0
+        currentTrack: newTrack,
+        currentTime: 0,
+        recentlyPlayed: updatedRecentlyPlayed
       };
     case 'SET_PLAYING':
       return {
@@ -83,6 +93,11 @@ function musicReducer(state, action) {
         ...state,
         folders: foldersAfterRemove
       };
+    case 'LOAD_RECENTLY_PLAYED':
+      return {
+        ...state,
+        recentlyPlayed: action.payload
+      };
     // ... other cases ...
     default:
       return state;
@@ -90,7 +105,10 @@ function musicReducer(state, action) {
 }
 
 export function MusicProvider({ children }) {
-  const [state, dispatch] = useReducer(musicReducer, initialState);
+  const [state, dispatch] = useReducer(musicReducer, {
+    ...initialState,
+    recentlyPlayed: JSON.parse(localStorage.getItem('recentlyPlayed') || '[]')
+  });
   const audioRef = useRef(new Audio());
 
   // Handle track changes
@@ -176,6 +194,17 @@ export function MusicProvider({ children }) {
       dispatch({ 
         type: 'LOAD_FOLDERS', 
         payload: JSON.parse(savedFolders) 
+      });
+    }
+  }, []);
+
+  // Load recently played from localStorage
+  useEffect(() => {
+    const savedRecentlyPlayed = localStorage.getItem('recentlyPlayed');
+    if (savedRecentlyPlayed) {
+      dispatch({
+        type: 'LOAD_RECENTLY_PLAYED',
+        payload: JSON.parse(savedRecentlyPlayed)
       });
     }
   }, []);

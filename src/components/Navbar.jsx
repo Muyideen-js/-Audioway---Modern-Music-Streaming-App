@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMusic } from '../context/MusicContext';
 import { searchTracks } from '../services/musicService';
-import { FiLogOut, FiSearch } from 'react-icons/fi';
+import { FiLogOut, FiSearch, FiMusic } from 'react-icons/fi';
 import './Navbar.css';
 
 function Navbar() {
@@ -85,7 +85,12 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="nav-left">
-        <div className="logo">Audioway</div>
+        <div className="logo-wrapper">
+          <div className="logo">
+            Audio<span className="way-text">Way</span>
+            <FiMusic className="music-icon" />
+          </div>
+        </div>
         <form onSubmit={handleSubmit} className="search-container" ref={searchContainerRef}>
           <FiSearch className="search-icon" />
           <input

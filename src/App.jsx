@@ -8,43 +8,57 @@ import Login from './pages/Login';
 import SpotifyCallback from './components/SpotifyCallback';
 import ProtectedRoute from './components/ProtectedRoute';
 import SearchResults from './pages/SearchResults';
-// import { PlaylistProvider } from './context/PlaylistContext';
-// import Playlist from './components/Playlist';
-import Playlist from './pages/Playlist'; // This is the correct import
+import Playlist from './pages/Playlist';
+import RecentlyPlayed from './components/RecentlyPlayed';
+import Upload from './components/Upload';
+import TrendingSongs from './components/TrendingSongs';
 import './styles/theme.css';
 
 function App() {
   return (
-    // <PlaylistProvider>
-      <MusicProvider>
-        <Router>
-          <div className="app-container">
-            <Navbar />
-            <div className="main-content">
-              <Sidebar />
-              <div className="content-area">
-                <Routes>
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/callback" element={<SpotifyCallback />} />
-                  <Route path="/" element={
-                    <ProtectedRoute>
-                      <Home />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/search" element={
-                    <ProtectedRoute>
-                      <SearchResults />
-                    </ProtectedRoute>
-                  } />
-                  <Route path="/playlist" element={<Playlist />} />
-                </Routes>
-              </div>
+    <MusicProvider>
+      <Router>
+        <div className="app-container">
+          <Navbar />
+          <div className="main-content">
+            <Sidebar />
+            <div className="content-area">
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/callback" element={<SpotifyCallback />} />
+                <Route path="/" element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                } />
+                <Route path="/search" element={
+                  <ProtectedRoute>
+                    <SearchResults />
+                  </ProtectedRoute>
+                } />
+                <Route path="/playlist" element={<Playlist />} />
+                <Route path="/recently-played" element={
+                  <ProtectedRoute>
+                    <RecentlyPlayed />
+                  </ProtectedRoute>
+                } />
+                <Route path="/upload" element={
+                  <ProtectedRoute>
+                    <Upload />
+                  </ProtectedRoute>
+                } />
+                <Route path="/trending-songs" element={
+                  <ProtectedRoute>
+                    <TrendingSongs />
+                  </ProtectedRoute>
+                } />
+              </Routes>
             </div>
-            <AudioPlayer />
           </div>
-        </Router>
-      </MusicProvider>
-    // </PlaylistProvider>
+          <AudioPlayer />
+        </div>
+      </Router>
+    </MusicProvider>
   );
 }
 

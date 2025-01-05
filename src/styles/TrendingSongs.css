@@ -1,0 +1,102 @@
+.trending-songs-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-left: 40px;
+}
+
+.trending-songs-header {
+  margin-bottom: 2rem;
+}
+
+.trending-songs-header h1 {
+  font-size: 2rem;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.trending-songs-header p {
+  color: #b3b3b3;
+  font-size: 1rem;
+}
+
+.trending-songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.trending-song-card {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.trending-song-card:hover {
+  transform: translateY(-5px);
+}
+
+.trending-number {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 30px;
+  height: 30px;
+  background: #f7b42c;
+  color: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+  z-index: 1;
+}
+
+.trending-songs-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: #fff;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.trending-songs-error {
+  text-align: center;
+  padding: 2rem;
+  color: #ff4444;
+}
+
+.no-songs {
+  text-align: center;
+  padding: 3rem;
+  color: #b3b3b3;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .trending-songs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .trending-songs-header h1 {
+    font-size: 1.5rem;
+  }
+} 

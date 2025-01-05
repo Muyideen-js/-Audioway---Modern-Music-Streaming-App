@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React,{useState,useEffect} from 'react';
+import RecentlyPlayed from '../components/RecentlyPlayed';
 import { useNavigate } from 'react-router-dom';
 import { FiLoader } from 'react-icons/fi';
 import { useMusic } from '../context/MusicContext';

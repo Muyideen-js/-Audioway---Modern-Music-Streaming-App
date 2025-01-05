@@ -4,7 +4,7 @@ import {
   FiTrendingUp, 
   FiDisc, 
   FiClock, 
-  FiPlus,
+  FiUpload,
   FiBarChart2,
   FiMusic
 } from 'react-icons/fi';
@@ -30,9 +30,9 @@ function Sidebar() {
             </Link>
           </li>
           <li>
-            <Link to="/trending-albums" className={location.pathname === '/trending-albums' ? 'active' : ''}>
+            <Link to="/recently-played" className={location.pathname === '/recently-played' ? 'active' : ''}>
               <FiDisc />
-              Trending Albums
+              Recently Played
             </Link>
           </li>
           <li>
@@ -42,9 +42,9 @@ function Sidebar() {
             </Link>
           </li>
           <li>
-            <Link to="/recently-added" className={location.pathname === '/recently-added' ? 'active' : ''}>
-              <FiPlus />
-              Recently Added
+            <Link to="/upload" className={location.pathname === '/upload' ? 'active' : ''}>
+              <FiUpload />
+              Upload
             </Link>
           </li>
         </ul>

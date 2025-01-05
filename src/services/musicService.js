@@ -2,6 +2,13 @@ import SpotifyWebApi from 'spotify-web-api-js';
 
 const spotify = new SpotifyWebApi();
 
+
+const GENIUS_ACCESS_TOKEN = 'YOUR_GENIUS_ACCESS_TOKEN'; // Replace with your token
+const GENIUS_BASE_URL = 'https://api.genius.com';
+
+const HAPPI_API_KEY = 'hk124-l1BfzlTjxJ8RvGmnqT2fBHscarDVuIUYe6';
+const HAPPI_BASE_URL = 'https://api.happi.dev/v1/music';
+
 export const getToken = () => localStorage.getItem('spotify_token');
 
 export const setSpotifyAccessToken = (token) => {
@@ -148,5 +155,67 @@ export async function checkTokenValidity() {
     console.error('Token validation error:', error);
     localStorage.removeItem('spotify_token');
     return false;
+  }
+}
+
+export async function getLyrics(title, artist) {
+  try {
+    // First, search for the song
+    const searchUrl = `${HAPPI_BASE_URL}/search/${encodeURIComponent(artist)}/${encodeURIComponent(title)}?apikey=${HAPPI_API_KEY}&limit=1`;
+    
+    const searchResponse = await fetch(searchUrl);
+    const searchData = await searchResponse.json();
+
+    if (!searchData.success || !searchData.result.length) {
+      console.log('No song found:', { title, artist });
+      return null;
+    }
+
+    // Get the first result's ID
+    const songId = searchData.result[0].id_track;
+
+    // Fetch lyrics using the track ID
+    const lyricsUrl = `${HAPPI_BASE_URL}/lyrics/${songId}?apikey=${HAPPI_API_KEY}`;
+    const lyricsResponse = await fetch(lyricsUrl);
+    const lyricsData = await lyricsResponse.json();
+
+    if (!lyricsData.success || !lyricsData.result.lyrics) {
+      console.log('No lyrics found for:', { title, artist });
+      return null;
+    }
+
+    return lyricsData.result.lyrics;
+
+  } catch (error) {
+    console.error('Error fetching lyrics:', error);
+    return null;
+  }
+}
+
+// Add this function to get additional song details
+export async function getSongDetails(title, artist) {
+  try {
+    const searchUrl = `${HAPPI_BASE_URL}/search/${encodeURIComponent(artist)}/${encodeURIComponent(title)}?apikey=${HAPPI_API_KEY}&limit=1`;
+    
+    const response = await fetch(searchUrl);
+    const data = await response.json();
+
+    if (!data.success || !data.result.length) {
+      return null;
+    }
+
+    const songInfo = data.result[0];
+    return {
+      title: songInfo.track,
+      artist: songInfo.artist,
+      album: songInfo.album,
+      cover: songInfo.cover,
+      releaseDate: songInfo.release_date,
+      bpm: songInfo.bpm,
+      genres: songInfo.genres
+    };
+  } catch (error) {
+    console.error('Error fetching song details:', error);
+    return null;
   }
 }

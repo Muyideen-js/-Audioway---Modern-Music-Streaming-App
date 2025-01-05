@@ -6,7 +6,6 @@ import Toast from './Toast';
 import '../styles/MusicCard.css';
 import './MusicCard.css';
 
-
 function CreateFolderModal({ onClose, onCreate }) {
   const [folderName, setFolderName] = useState('');
   const [error, setError] = useState('');
@@ -166,7 +165,10 @@ function MusicCard({ track }) {
 
   return (
     <>
-      <div className="music-card" data-testid="music-card">
+      <div 
+        className="music-card"
+        data-testid="music-card"
+      >
         <div className="cover-container">
           <img 
             src={imageError ? '/default-album.png' : track.coverImage} 
